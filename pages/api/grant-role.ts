@@ -32,8 +32,10 @@ export default async function grantRole(
   }
 
   // Check if this user owns an NFT
+  //0x4a160D7a3cae6F2e33Ef45Df2C378019b08Ac051
   const editionDrop = await sdk.getContract(
-    "0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF",
+   //"0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF",
+    "0x4a160D7a3cae6F2e33Ef45Df2C378019b08Ac051",
     "edition-drop"
   );
 
@@ -44,15 +46,21 @@ export default async function grantRole(
     // If the user is verified and has an NFT, return the content
 
     // Make a request to the Discord API to get the servers this user is a part of
-    const discordServerId = "999533680663998485";
-
+    //const discordServerId = "999533680663998485";
+    /*const GRYFFINDOR_ROLE = "1042522790114377818"
+    const SLYTHERIN_ROLE="1042522846406131732"
+    const RAVENCLAW_ROLE="1042522672787095633"
+    const HUFFLEPUFF_ROLE="1042522922276884540"
+    "*/
+    const discordServerId = "1042505236117458984"
     // @ts-ignore
     const { userId } = session;
 
     console.log(userId)
 
     
-    const roleId = "999851736028172298";
+   // const roleId = "999851736028172298";
+    const roleId = "1042522790114377818";
     console.log(`https://discordapp.com/api/guilds/${discordServerId}/members/${userId}/roles/${roleId}`)
     const response = await fetch(
       // Discord Developer Docs for this API Request: https://discord.com/developers/docs/resources/guild#add-guild-member-role

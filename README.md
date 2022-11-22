@@ -241,7 +241,8 @@ if (balance.toNumber() > 0) {
   // If the user is verified and has an NFT, return the content
 
   // Make a request to the Discord API to get the servers this user is a part of
-  const discordServerId = "999533680663998485";
+  //const discordServerId = "999533680663998485";
+  discordServerId = "1042505236117458984";
   const { userId } = session;
   const roleId = "999851736028172298";
   const response = await fetch(
