@@ -30,14 +30,20 @@ export default async function grantRole(
     res.status(401).json({ error: "Invalid login payload" });
     return;
   }
-
+  //HOGWARTS_ADDRESS="0x5c4178bde46d64c1823d185db18113e39c3e286a"
   // Check if this user owns an NFT
   //0x4a160D7a3cae6F2e33Ef45Df2C378019b08Ac051
+  // what are the parameters of sdk.getContract()?
+  
   const editionDrop = await sdk.getContract(
    //"0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF",
-    "0x4a160D7a3cae6F2e33Ef45Df2C378019b08Ac051",
-    "edition-drop"
+   //"0x5c4178bde46d64c1823d185db18113e39c3e286a",
+  // "0x5c4178bde46d64c1823d185db18113e39c3e286a",
+  "0x8af27608Ec4822336439903269dDfB165e432FD5",
+    "edition-drop" // 
   );
+// the types of thirdWeb contracts are:
+// "edition-drop"
 
   // Get addresses' balance of token ID 0
   const balance = await editionDrop.balanceOf(verifiedWalletAddress, 0);
@@ -52,19 +58,19 @@ export default async function grantRole(
     const RAVENCLAW_ROLE="1042522672787095633"
     const HUFFLEPUFF_ROLE="1042522922276884540"
     "*/
-    const discordServerId = "1042505236117458984"
+    //const discordServerId = "1042505236117458984"
     // @ts-ignore
     const { userId } = session;
-
-    console.log(userId)
+    //console.log(' discordServerId' +  discordServerId)
+    console.log('userId' + userId)
 
     
    // const roleId = "999851736028172298";
     const roleId = "1042522790114377818";
-    console.log(`https://discordapp.com/api/guilds/${discordServerId}/members/${userId}/roles/${roleId}`)
+    console.log(`https://discordapp.com/api/guilds/${process.env.DISCORD_SERVER_ID}/members/${userId}/roles/${roleId}`)
     const response = await fetch(
       // Discord Developer Docs for this API Request: https://discord.com/developers/docs/resources/guild#add-guild-member-role
-      `https://discordapp.com/api/guilds/${discordServerId}/members/${userId}/roles/${roleId}`,
+      `https://discordapp.com/api/guilds/${process.env.DISCORD_SERVER_ID}/members/${userId}/roles/${roleId}`,
       {
         headers: {
           // Use the bot token to grant the role
