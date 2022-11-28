@@ -5,21 +5,21 @@ import SignIn from "../components/SignIn";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
-  const address = useAddress();
-  const { data: session } = useSession();
-  const sdk = useSDK();
+  const address = useAddress(); // Get the user's address
+  const { data: session } = useSession(); // Get the user's session which contains the user's address
+  const sdk = useSDK(); // Get the Thirdweb SDK
 
   async function requestGrantRole() {
     // First, login and sign a message
-    const domain = "example.com";
-    const loginPayload = await sdk?.auth.login(domain);
-
+    const domain = "example.com"; // This is the domain of your dApp
+    const loginPayload = await sdk?.auth.login(domain); // This will open a modal to login and sign a message
+console.log(loginPayload);
     // Then make a request to our API endpoint.
     try {
       const response = await fetch("/api/grant-role", {
         method: "POST",
         body: JSON.stringify({
-          loginPayload,
+          loginPayload, // This is the payload you got from the login step
         }),
       });
       const data = await response.json();

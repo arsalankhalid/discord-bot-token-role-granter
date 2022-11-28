@@ -2,7 +2,13 @@ import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]";
+import { ethers } from "ethers"
+// Import your ABI from a JSON file
 
+// how to import your ABI from a JSON file
+// https://stackoverflow.com/questions/52200378/how-to-import-json-file-in-typescript
+
+const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"account","type":"address"},{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":false,"internalType":"bool","name":"approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256[]","name":"ids","type":"uint256[]"},{"indexed":false,"internalType":"uint256[]","name":"values","type":"uint256[]"}],"name":"TransferBatch","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"TransferSingle","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"string","name":"value","type":"string"},{"indexed":true,"internalType":"uint256","name":"id","type":"uint256"}],"name":"URI","type":"event"},{"inputs":[],"name":"GRYFFINDOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"HUFFLEPUFF","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"RAVENCLAW","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"SLYTHERIN","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"id","type":"uint256"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address[]","name":"accounts","type":"address[]"},{"internalType":"uint256[]","name":"ids","type":"uint256[]"}],"name":"balanceOfBatch","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"burn","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256[]","name":"_ids","type":"uint256[]"},{"internalType":"uint256[]","name":"_amounts","type":"uint256[]"}],"name":"burnBatch","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_from","type":"address"},{"internalType":"uint256[]","name":"_burnIds","type":"uint256[]"},{"internalType":"uint256[]","name":"_burnAmounts","type":"uint256[]"},{"internalType":"uint256[]","name":"_mintIds","type":"uint256[]"},{"internalType":"uint256[]","name":"_mintAmounts","type":"uint256[]"}],"name":"burnForMint","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"address","name":"operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256[]","name":"_ids","type":"uint256[]"},{"internalType":"uint256[]","name":"_amounts","type":"uint256[]"}],"name":"mintBatch","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256[]","name":"ids","type":"uint256[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"safeBatchTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"string","name":"_uri","type":"string"}],"name":"setURI","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"uri","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"}];
 export default async function grantRole(
   req: NextApiRequest,
   res: NextApiResponse
@@ -10,7 +16,6 @@ export default async function grantRole(
   // Get the login payload out of the request
   console.log(req.body);
   const { loginPayload } = JSON.parse(req.body);
-
   // Get the Next Auth session so we can use the user ID as part of the discord API request
   const session = await unstable_getServerSession(req, res, authOptions)
 
@@ -18,9 +23,13 @@ export default async function grantRole(
     res.status(401).json({ error: "Not logged in" });
     return;
   }
-
   // Authenticate login payload
   const sdk = new ThirdwebSDK("mumbai");
+const provider = new ethers.providers.JsonRpcProvider("https://rpc-mumbai.matic.today"); // what are the arguments? the argument is the network, but how to get the network?
+console.log(provider);
+const hogwartsContract = new ethers.Contract("0x5c4178bde46d64c1823d185db18113e39c3e286a",abi,provider); // arguments : address, abi, provider
+console.log(hogwartsContract);
+
   const domain = "example.com";
   // Verify the login payload is real and valid
   const verifiedWalletAddress = sdk.auth.verify(domain, loginPayload);
@@ -30,50 +39,29 @@ export default async function grantRole(
     res.status(401).json({ error: "Invalid login payload" });
     return;
   }
-  //HOGWARTS_ADDRESS="0x5c4178bde46d64c1823d185db18113e39c3e286a"
-  // Check if this user owns an NFT
-  //0x4a160D7a3cae6F2e33Ef45Df2C378019b08Ac051
-  // what are the parameters of sdk.getContract()?
-  
-  const editionDrop = await sdk.getContract(
-   //"0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF",
-   //"0x5c4178bde46d64c1823d185db18113e39c3e286a",
-  // "0x5c4178bde46d64c1823d185db18113e39c3e286a",
-  "0x8af27608Ec4822336439903269dDfB165e432FD5",
-    "edition-drop" // 
-  );
-// the types of thirdWeb contracts are:
-// "edition-drop"
+  console.log(verifiedWalletAddress);
+console.log('line 44');
+//  reason: 'missing argument: passed to contract', what is the second argument? : the address of the user
 
-  // Get addresses' balance of token ID 0
-  const balance = await editionDrop.balanceOf(verifiedWalletAddress, 0);
-
-  if (balance.toNumber() === 0) {
+const balance = await hogwartsContract.balanceOf(verifiedWalletAddress, 1);
+console.log('balance');
+console.log(balance);
+console.log('balance.toNumber()');
+console.log(balance.toNumber());
+  if (balance.toNumber() > 0) {
     // If the user is verified and has an NFT, return the content
-
     // Make a request to the Discord API to get the servers this user is a part of
-    //const discordServerId = "999533680663998485";
-    /*const GRYFFINDOR_ROLE = "1042522790114377818"
-    const SLYTHERIN_ROLE="1042522846406131732"
-    const RAVENCLAW_ROLE="1042522672787095633"
-    const HUFFLEPUFF_ROLE="1042522922276884540"
-    "*/
-    //const discordServerId = "1042505236117458984"
     // @ts-ignore
     const { userId } = session;
-    //console.log(' discordServerId' +  discordServerId)
     console.log('userId' + userId)
-
-    
-   // const roleId = "999851736028172298";
-    const roleId = "1042522790114377818";
+   const roleId="1042522846406131732";
     console.log(`https://discordapp.com/api/guilds/${process.env.DISCORD_SERVER_ID}/members/${userId}/roles/${roleId}`)
     const response = await fetch(
       // Discord Developer Docs for this API Request: https://discord.com/developers/docs/resources/guild#add-guild-member-role
       `https://discordapp.com/api/guilds/${process.env.DISCORD_SERVER_ID}/members/${userId}/roles/${roleId}`,
       {
         headers: {
-          // Use the bot token to grant the role
+          // Use the bot token to authenticate the request
           Authorization: `Bot ${process.env.BOT_TOKEN}`,
         },
         method: "PUT",
