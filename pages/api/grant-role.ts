@@ -21,9 +21,7 @@ export default async function grantRole(
   const sdk = new ThirdwebSDK("mumbai");
   const provider = new ethers.providers.JsonRpcProvider("https://rpc-mumbai.matic.today"); 
   const hogwartsContract = new ethers.Contract(process.env.CONTRACT_ADDRESS as string,abi,provider); // arguments : address, abi, provider
-  console.log(hogwartsContract);
-  const domain = "example.com";
-  const verifiedWalletAddress = sdk.auth.verify(domain, loginPayload);  // Verify the login payload is real and valid
+  const verifiedWalletAddress = sdk.auth.verify(process.env.DOMAIN as string, loginPayload);  // Verify the login payload is real and valid
   if (!verifiedWalletAddress) {  // If the login payload is not valid, return an error
     res.status(401).json({ error: "Invalid login payload" });
     return;
@@ -47,8 +45,7 @@ export default async function grantRole(
   if (balance.toNumber() > 0) {     // If the user is verified and has an NFT, return the content
     // @ts-ignore
    const { userId } = session;
-   const roleId=roleAssign[TOKEN_ID];
-   console.log('roleId'+roleId);
+   const roleId = roleAssign[TOKEN_ID];
     console.log(`https://discordapp.com/api/guilds/${process.env.DISCORD_SERVER_ID}/members/${userId}/roles/${roleId}`);
     const response = await fetch(
       `https://discordapp.com/api/guilds/${process.env.DISCORD_SERVER_ID}/members/${userId}/roles/${roleId}`,
