@@ -10,31 +10,24 @@ export default async function grantRole(
   res: NextApiResponse
 ) {
   // Get the login payload out of the request
-  console.log(req.body);
   const { loginPayload } = JSON.parse(req.body);
   // Get the Next Auth session so we can use the user ID as part of the discord API request
   const session = await unstable_getServerSession(req, res, authOptions)
-
   if (!session) {
     res.status(401).json({ error: "Not logged in" });
     return;
   }
   // Authenticate login payload
   const sdk = new ThirdwebSDK("mumbai");
-
   const provider = new ethers.providers.JsonRpcProvider("https://rpc-mumbai.matic.today"); 
-  console.log("line 26");
   const hogwartsContract = new ethers.Contract(process.env.CONTRACT_ADDRESS as string,abi,provider); // arguments : address, abi, provider
   console.log(hogwartsContract);
   const domain = "example.com";
-  // Verify the login payload is real and valid
-  const verifiedWalletAddress = sdk.auth.verify(domain, loginPayload);
-  // If the login payload is not valid, return an error
-  if (!verifiedWalletAddress) {
+  const verifiedWalletAddress = sdk.auth.verify(domain, loginPayload);  // Verify the login payload is real and valid
+  if (!verifiedWalletAddress) {  // If the login payload is not valid, return an error
     res.status(401).json({ error: "Invalid login payload" });
     return;
   }
-  console.log("line 37");
   const TOKEN_ID = 3;
   const roleAssign = {
     0: process.env.DISCORD_GRYFFINDOR_ROLE as string,
@@ -51,33 +44,25 @@ export default async function grantRole(
   const roleMessage = roleAssignMessage[TOKEN_ID];
   const balance = await hogwartsContract.balanceOf(verifiedWalletAddress, TOKEN_ID); // arguments : address, token id
   console.log('balance' + balance.toNumber());
-  if (balance.toNumber() > 0) {
-    // If the user is verified and has an NFT, return the content
-    // Make a request to the Discord API to get the servers this user is a part of
+  if (balance.toNumber() > 0) {     // If the user is verified and has an NFT, return the content
     // @ts-ignore
-    const { userId } = session;
+   const { userId } = session;
    const roleId=roleAssign[TOKEN_ID];
    console.log('roleId'+roleId);
     console.log(`https://discordapp.com/api/guilds/${process.env.DISCORD_SERVER_ID}/members/${userId}/roles/${roleId}`);
     const response = await fetch(
-      // Discord Developer Docs for this API Request: https://discord.com/developers/docs/resources/guild#add-guild-member-role
-      `https://discordapp.com/api/guilds/${process.env.DISCORD_SERVER_ID}/members/${userId}/roles/${process.env.DISCORD_RAVENCLAW_ROLE}`,
+      `https://discordapp.com/api/guilds/${process.env.DISCORD_SERVER_ID}/members/${userId}/roles/${roleId}`,
       {
         headers: {
-          // Use the bot token to authenticate the request
-          Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
+          Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,  // Use the bot token to authenticate the request
         },
         method: "PUT",
       }
     );
-
-    // If the role was granted, return the content
-    if (response.ok) {
+    if (response.ok) { // If the role was granted, return the content
       res.status(200).json({ message: roleMessage });
     }
-
-    // Something went wrong granting the role, but they do have an NFT
-    else {
+    else { // Something went wrong granting the role, but they do have an NFT
       const resp = await response.json();
       console.error(resp);
       res
@@ -85,8 +70,7 @@ export default async function grantRole(
         .json({ error: "Error granting role, are you in the server?" });
     }
   }
-  // If the user is verified but doesn't have an NFT, return an error
-  else {
+  else { // If the user is verified but doesn't have an NFT, return an error
     res.status(401).json({ error: "User does not have an NFT" });
   }
 }

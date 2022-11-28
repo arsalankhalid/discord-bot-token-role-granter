@@ -35,7 +35,6 @@ export default function SignIn() {
       <div className={`${styles.main}`}>
         <h2 className={styles.noGapBottom}>Sign In with Discord</h2>
         <p>Sign In with Discord to check your eligibility for the NFT!</p>
-
         <button
           onClick={() => signIn("discord")}
           className={`${styles.mainButton} ${styles.spacerTop}`}
