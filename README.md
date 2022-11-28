@@ -137,8 +137,8 @@ export default NextAuth({
   // Configure one or more authentication providers
   providers: [
     DiscordProvider({
-      clientId: process.env.CLIENT_ID as string,
-      clientSecret: process.env.CLIENT_SECRET as string,
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
     }),
   ],
 
@@ -251,7 +251,7 @@ if (balance.toNumber() > 0) {
     {
       headers: {
         // Use the bot token to grant the role
-        Authorization: `Bot ${process.env.BOT_TOKEN}`,
+        Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
       },
       method: "PUT",
     }

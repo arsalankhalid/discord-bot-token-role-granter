@@ -13,7 +13,6 @@ const Home: NextPage = () => {
     // First, login and sign a message
     const domain = "example.com"; // This is the domain of your dApp
     const loginPayload = await sdk?.auth.login(domain); // This will open a modal to login and sign a message
-console.log(loginPayload);
     // Then make a request to our API endpoint.
     try {
       const response = await fetch("/api/grant-role", {
@@ -24,7 +23,7 @@ console.log(loginPayload);
       });
       const data = await response.json();
       console.log(data);
-      alert("Check the console for the response!");
+      alert("Check the console for the response!"); 
     } catch (e) {
       console.error(e);
     }
