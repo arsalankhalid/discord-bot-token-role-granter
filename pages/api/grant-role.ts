@@ -58,6 +58,8 @@ export default async function grantRole(
     );
     if (response.ok) { // If the role was granted, return the content
       res.status(200).json({ message: roleMessage });
+      //create the entire document as it's structured (id, name of the role, balance of NFT)
+      //write to the document db using mongoose orm
     }
     else { // Something went wrong granting the role, but they do have an NFT
       const resp = await response.json();
@@ -65,6 +67,7 @@ export default async function grantRole(
       res
         .status(500)
         .json({ error: "Error granting role, are you in the server?" });
+    //if the api fails make sure to not write to the document store
     }
   }
   else { // If the user is verified but doesn't have an NFT, return an error
